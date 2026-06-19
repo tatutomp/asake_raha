@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Tallennettu suositushistoria (paikallinen data)
+data/
+*.tmp
+
+# Editori / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

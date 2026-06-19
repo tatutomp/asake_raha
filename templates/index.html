@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volatiliteetti-skanneri · Yön yli -strategia</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>📈 Volatiliteetti-skanneri</h1>
+    <p class="subtitle">Nasdaq-100 · yön yli -strategia · osta ennen sulkua, myy avauksen jälkeen</p>
+  </header>
+
+  <div class="disclaimer">
+    ⚠️ <strong>Ei sijoitusneuvontaa.</strong> Tämä on opetus- ja analyysityökalu.
+    Historiallinen volatiliteetti ei ennusta tulevia tuottoja. Sijoittaminen on
+    aina omalla vastuulla. Yön yli -kaupankäynti on riskialtista.
+  </div>
+
+  <section class="actions">
+    <div class="action-card buy">
+      <h2>🌆 Iltapäivitys</h2>
+      <p>Aja noin <strong>20 min ennen Nasdaqin sulkua</strong>. Antaa 5 ostokohdetta yön yli pidettäväksi.</p>
+      <button id="btn-buy">Laske ostosuositukset</button>
+    </div>
+    <div class="action-card sell">
+      <h2>🌅 Aamupäivitys</h2>
+      <p>Aja noin <strong>20 min Nasdaqin avauksen jälkeen</strong>. Arvioi eilen ostetut ja suosittelee myynnit.</p>
+      <button id="btn-sell">Laske myyntisuositukset</button>
+    </div>
+  </section>
+
+  <div id="status" class="status hidden"></div>
+
+  <section id="result" class="result hidden">
+    <h2 id="result-title"></h2>
+    <div id="result-meta" class="result-meta"></div>
+    <div id="result-table"></div>
+  </section>
+
+  <section class="history">
+    <h2>📜 Historia</h2>
+    <div id="history-list">Ladataan…</div>
+  </section>
+
+  <footer>
+    <p>Data: Yahoo Finance (yfinance). Pisteytys: ATR-volatiliteetti, sulkuvahvuus,
+    momentum, yön yli -gap-historia ja suhteellinen vaihto.</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
