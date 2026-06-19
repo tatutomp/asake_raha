@@ -211,6 +211,31 @@ def pick_portfolio(metrics: List[StockMetrics], n: int = 5) -> List[StockMetrics
     return metrics[:n]
 
 
+def fetch_week_history(tickers: List[str]) -> Dict[str, list]:
+    """Hae viimeisen viikon tuntitason hinnat kuvaajia varten.
+
+    Palauttaa {ticker: [{"t": ISO-aika, "c": sulkuhinta}, ...]}.
+    """
+    result: Dict[str, list] = {}
+    if not tickers:
+        return result
+    df = yf.download(
+        tickers, period="7d", interval="60m", progress=False,
+        auto_adjust=True, group_by="ticker", threads=True,
+    )
+    for t in tickers:
+        sub = _ticker_frame(df, t)
+        if sub is None or "Close" not in sub.columns:
+            result[t] = []
+            continue
+        series = sub["Close"].dropna()
+        result[t] = [
+            {"t": idx.isoformat(), "c": round(float(val), 2)}
+            for idx, val in series.items()
+        ]
+    return result
+
+
 def reason_text(m: StockMetrics) -> str:
     """Lyhyt suomenkielinen perustelu osakkeelle."""
     parts = []

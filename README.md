@@ -62,6 +62,25 @@ positio strategian mukaisesti. Kynnyksiä voi säätää tiedostossa
 
 ---
 
+## ☁️ Käyttö puhelimella (pilvideploy Renderiin)
+
+Sovellus saadaan julkiseen `https://...`-osoitteeseen, joka toimii puhelimella
+missä vain — eikä oma kone tarvitse olla päällä.
+
+1. Mene <https://render.com> ja kirjaudu **"Sign in with GitHub"**.
+2. **New +** → **Blueprint**.
+3. Valitse repo **`tatutomp/asake_raha`** (anna Renderille lupa lukea repo).
+4. Render lukee [`render.yaml`](render.yaml):n automaattisesti → paina **Apply**.
+5. Odota muutama minuutti (asennus + käynnistys). Saat osoitteen muotoa
+   `https://asake-raha.onrender.com` — avaa se puhelimella.
+
+Jokaisen `git push`:n jälkeen Render päivittää sovelluksen automaattisesti.
+
+> ℹ️ **Ilmaisen tason huomiot:** palvelu "nukahtaa" ~15 min käyttämättömyyden
+> jälkeen, jolloin ensimmäinen avaus voi kestää ~30–60 s. Suositushistoria
+> (`data/`) ei säily uudelleenkäynnistyksissä ilmaistasolla — demoon riittää,
+> pysyvään käyttöön tarvitaan maksullinen levy.
+
 ## Tiedostot
 
 | Tiedosto | Tarkoitus |

@@ -27,12 +27,85 @@ async function postJSON(url) {
   return data;
 }
 
+// --- Kuvaajat (viimeinen viikko) ---
+let chartInstances = [];
+
+function clearCharts() {
+  chartInstances.forEach((c) => c.destroy());
+  chartInstances = [];
+  $("chart-grid").innerHTML = "";
+}
+
+function renderCharts(portfolio) {
+  clearCharts();
+  const grid = $("chart-grid");
+  portfolio.forEach((p, i) => {
+    const hist = p.history || [];
+    const card = document.createElement("div");
+    card.className = "chart-card";
+    let weekPct = null, last = null;
+    if (hist.length >= 2) {
+      const first = hist[0].c;
+      last = hist[hist.length - 1].c;
+      weekPct = (last / first - 1) * 100;
+    }
+    card.innerHTML = `
+      <div class="cc-head">
+        <span class="ticker">${p.ticker}</span>
+        <span class="cc-price">${last !== null ? "$" + last.toFixed(2) : ""}</span>
+      </div>
+      <div class="cc-sub ${pctClass(weekPct)}">
+        viikko ${fmtPct(weekPct)} · ATR ${p.atr_pct.toFixed(1)}%
+      </div>
+      <div class="cc-canvas"><canvas id="chart-${i}"></canvas></div>`;
+    grid.appendChild(card);
+
+    if (hist.length < 2) return;
+    const up = weekPct >= 0;
+    const line = up ? "#2ea043" : "#e5534b";
+    const ctx = document.getElementById("chart-" + i).getContext("2d");
+    const grad = ctx.createLinearGradient(0, 0, 0, 130);
+    grad.addColorStop(0, up ? "rgba(46,160,67,0.35)" : "rgba(229,83,75,0.35)");
+    grad.addColorStop(1, "rgba(0,0,0,0)");
+    const chart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: hist.map((h) => h.t),
+        datasets: [{
+          data: hist.map((h) => h.c),
+          borderColor: line,
+          backgroundColor: grad,
+          borderWidth: 2,
+          fill: true,
+          pointRadius: 0,
+          tension: 0.25,
+        }],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { display: false },
+          y: {
+            ticks: { color: "#8b98a8", font: { size: 10 }, maxTicksLimit: 4 },
+            grid: { color: "rgba(46,58,74,0.5)" },
+          },
+        },
+        interaction: { intersect: false, mode: "index" },
+      },
+    });
+    chartInstances.push(chart);
+  });
+}
+
 // --- Osto-tulostaulu ---
 function renderBuy(entry) {
   $("result-title").textContent = "🌆 Ostosuositukset " + entry.date;
   $("result-meta").innerHTML =
     `Analysoitu ${entry.universe_size} osaketta · luotu ${entry.created_at} · ` +
     `pidä yön yli, myy avauksen jälkeen.`;
+  renderCharts(entry.portfolio);
 
   let rows = entry.portfolio.map((p) => `
     <tr>
@@ -59,6 +132,7 @@ function renderBuy(entry) {
 
 // --- Myynti-tulostaulu ---
 function renderSell(entry) {
+  clearCharts();
   $("result-title").textContent = "🌅 Myyntisuositukset " + entry.date;
   const avg = entry.avg_overnight_gap_pct;
   $("result-meta").innerHTML =

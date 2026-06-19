@@ -26,10 +26,45 @@ body {
 
 header {
   text-align: center;
-  padding: 28px 0 8px;
+  padding: 40px 0 14px;
+  background: radial-gradient(1200px 240px at 50% -40px, rgba(88,166,255,0.18), transparent 70%);
+  margin: 0 -16px 4px;
 }
-header h1 { margin: 0; font-size: 2rem; }
-.subtitle { color: var(--muted); margin: 6px 0 0; }
+header h1 {
+  margin: 0;
+  font-size: 2.3rem;
+  background: linear-gradient(90deg, #58a6ff, #2ea043);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.subtitle { color: var(--muted); margin: 8px 0 0; }
+
+/* Kuvaajaruudukko */
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.chart-card {
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px 10px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+}
+.cc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.cc-head .ticker { font-size: 1.15rem; }
+.cc-price { font-weight: 700; font-size: 1.05rem; }
+.cc-sub { font-size: 0.82rem; color: var(--muted); margin: 2px 0 8px; }
+.cc-sub.pos { color: #5ee07f; }
+.cc-sub.neg { color: #ff8077; }
+.cc-canvas { height: 130px; position: relative; }
 
 .disclaimer {
   max-width: 1000px;

@@ -66,6 +66,7 @@ def recommend_buy():
         return jsonify({"error": "Dataa ei saatu ladattua. Yritä uudelleen."}), 502
 
     portfolio = analyzer.pick_portfolio(metrics, PORTFOLIO_SIZE)
+    charts = analyzer.fetch_week_history([m.ticker for m in portfolio])
     entry = {
         "date": _today(),
         "created_at": _now_iso(),
@@ -75,6 +76,7 @@ def recommend_buy():
                 **m.to_dict(),
                 "buy_price": m.price,
                 "reason": analyzer.reason_text(m),
+                "history": charts.get(m.ticker, []),
             }
             for m in portfolio
         ],
